@@ -11,20 +11,53 @@ function Square({ value, onSquareClick }) {
 export default function Game() {
   const [xIsNext, setXIsNext] = useState(true);
   const [history, setHistory] = useState([Array(9).fill(null)]);
-  const currentSquares = history[history.length - 1];
+  const [currentMove, setCurrentMove] = useState(0)
+  // const currentSquares = history[history.length - 1]; //last one ( the newest step)
+
+  const currentSquares = history[currentMove];
+
+  console.log('history', history);
+  console.log('current square/box', currentSquares);
+  console.log(currentMove);
+
+
+  function jumpTo(nextMove) {
+    setCurrentMove(nextMove)
+    setXIsNext(nextMove % 2 === 0);
+
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = `go to move ${move}`
+    }
+    else {
+      description = 'go to start f=of the game'
+    }
+    return (<li key={move}>
+      <button onClick={() => jumpTo(move)}> {description} </button>
+    </li>)
+  })
+
 
   function handlePlay(nextSquares) {
-    setHistory([...history, nextSquares]);
+    // setHistory([...history, nextSquares]);
+    // setXIsNext(!xIsNext);
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);
     setXIsNext(!xIsNext);
-  } // add the history
+  }
 
   return (
+    //we did tat so the game control everything inside the board & track history.
     <div className="game">
       <div className="game-board">
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
-        <ol>{ }</ol>
+        <ol>{moves}</ol>
       </div>
     </div>
   );
