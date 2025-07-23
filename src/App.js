@@ -8,12 +8,10 @@ function Square({ value, onSquareClick }) {
   );
 }
 
-export default function Game() {
+export default function Game() {  //this is place show the steps of game
   const [xIsNext, setXIsNext] = useState(true);
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0)
-  // const currentSquares = history[history.length - 1]; //last one ( the newest step)
-
   const currentSquares = history[currentMove];
 
   console.log('history', history);
@@ -28,22 +26,18 @@ export default function Game() {
   }
 
   const moves = history.map((squares, move) => {
-    let description;
-    if (move > 0) {
-      description = `go to move ${move}`
-    }
-    else {
-      description = 'go to start f=of the game'
-    }
+    console.log('move', move);
+    //awel 7aga mynf3sh eny azhrlo l button "jump to move kza we ana fl move de f lazm n3ml check"
+    //3yza azhra gamb next player a7sn men list.
+    if (move === currentMove) return null
+
     return (<li key={move}>
-      <button onClick={() => jumpTo(move)}> {description} </button>
+      <button onClick={() => jumpTo(move)}> Jump to move {move} </button>
     </li>)
   })
 
 
   function handlePlay(nextSquares) {
-    // setHistory([...history, nextSquares]);
-    // setXIsNext(!xIsNext);
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
@@ -54,7 +48,7 @@ export default function Game() {
     //we did tat so the game control everything inside the board & track history.
     <div className="game">
       <div className="game-board">
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} currentMove={currentMove} />
       </div>
       <div className="game-info">
         <ol>{moves}</ol>
@@ -63,9 +57,7 @@ export default function Game() {
   );
 }
 
-function Board({ xIsNext, squares, onPlay }) {
-  // const [squares, setSquares] = useState(Array(9).fill(null)); //instead of repeating we fill the array with null
-  // const [isxNext, setIsXNext] = useState(true)
+function Board({ xIsNext, squares, onPlay, currentMove }) {
 
 
   function handleClick(i) {
@@ -87,8 +79,9 @@ function Board({ xIsNext, squares, onPlay }) {
   if (winner) {
     status = 'Winner: ' + winner;
   } else {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
+    status = 'Player Turn: ' + (xIsNext ? 'X' : 'O') + ' --' + (`You are at move #${currentMove}`);
   }
+  //Todo: I want to enhance this instead of you are at move 0 to say sth about starting the game 
 
   return (
     <>
