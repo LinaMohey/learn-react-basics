@@ -13,6 +13,7 @@ export default function Game() {  //this is place show the steps of game
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0)
   const currentSquares = history[currentMove];
+  const [isAscending, setisAscending] = useState(true)
 
   console.log('history', history);
   console.log('current square/box', currentSquares);
@@ -32,9 +33,14 @@ export default function Game() {  //this is place show the steps of game
     if (move === currentMove) return null
 
     return (<li key={move}>
+
       <button onClick={() => jumpTo(move)}> Jump to move {move} </button>
     </li>)
+
   })
+  if (!isAscending) {
+    moves.reverse()
+  }
 
 
   function handlePlay(nextSquares) {
@@ -51,6 +57,9 @@ export default function Game() {  //this is place show the steps of game
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} currentMove={currentMove} />
       </div>
       <div className="game-info">
+        {/* solution task 3 */}
+        <button onClick={() => setisAscending(!isAscending)}>toggle order</button>
+
         <ol>{moves}</ol>
       </div>
     </div>
