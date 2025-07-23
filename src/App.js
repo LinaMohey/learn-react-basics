@@ -83,11 +83,10 @@ function Board({ xIsNext, squares, onPlay, currentMove }) {
   }
   //Todo: I want to enhance this instead of you are at move 0 to say sth about starting the game 
 
-  return (
-    <>
-      <div className="status">{status}</div>
 
-      <div className="board-row">
+
+  {/* problem here the repetiion and hardcoded squares */ }
+  {/* <div className="board-row">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
         <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
         <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
@@ -101,9 +100,41 @@ function Board({ xIsNext, squares, onPlay, currentMove }) {
         <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
         <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
         <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div> */}
+
+  {/* solution task 2 */ }
+  {/* we need to loop through rows & columns so we need to arrays one for row and one for columns to make the board */ }
+  const board = [];
+
+  for (let row = 0; row < 3; row++) {
+    const rowSquares = [];
+    for (let col = 0; col < 3; col++) {
+      const index = row * 3 + col;
+      // da 3shan a3rf row 1 column kam msln 3yza row 1 col 2 el raqm feh kam? yb2a index 5 => index = row * 3 + col index = 1 * 3 + 2 = 5
+
+      rowSquares.push(
+        <Square key={index} value={squares[index]} onSquareClick={() => handleClick(index)} />
+      );
+    }
+
+    board.push(
+      <div key={row} className="board-row">
+        {rowSquares}
       </div>
+    );
+  }
+
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      {board}
     </>
-  );
+  )
+
+
+
+
 }
 
 function calculateWinner(squares) {
